@@ -4,11 +4,11 @@
   --background: #f4f7fb;
   --foreground: #101820;
 
-  /* APPRENTICE theme palette */
-  --color-navy: #024381;
-  --color-blue: #005eb8;
-  --color-cta: #066ac5;
-  --color-cta-dark: #024381;
+  /* APPRENTICE theme palette (deep teal, from the program poster) */
+  --color-navy: #12363d;
+  --color-blue: #1b4a52;
+  --color-cta: #2f6d77;
+  --color-cta-dark: #12363d;
 }
 
 @theme inline {
