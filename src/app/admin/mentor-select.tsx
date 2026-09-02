@@ -23,7 +23,7 @@ export function MentorSelect({
       <select
         name="mentorId"
         defaultValue={currentMentorId ?? ""}
-        className="rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:border-gray-900 focus:outline-none"
+        className="rounded-lg border border-gray-300 px-2 py-1.5 text-sm focus:border-blue focus:outline-none"
       >
         <option value="">No mentor</option>
         {mentors.map((m) => (

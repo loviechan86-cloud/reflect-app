@@ -8,24 +8,31 @@ export function Header({
   userName: string;
 }) {
   return (
-    <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
-      <div>
-        <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
-        <p className="text-sm text-gray-500">Signed in as {userName}</p>
+    <header className="bg-blue">
+      <div className="bg-navy px-6 py-1.5 text-right text-xs font-medium text-white/80">
+        APPRENTICE
       </div>
-      <form
-        action={async () => {
-          "use server";
-          await signOut({ redirectTo: "/login" });
-        }}
-      >
-        <button
-          type="submit"
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+      <div className="flex items-center justify-between px-6 py-4">
+        <div>
+          <h1 className="text-lg font-extrabold tracking-wide text-white uppercase">
+            {title}
+          </h1>
+          <p className="text-sm text-white/80">Signed in as {userName}</p>
+        </div>
+        <form
+          action={async () => {
+            "use server";
+            await signOut({ redirectTo: "/login" });
+          }}
         >
-          Sign out
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="rounded-full bg-white px-4 py-1.5 text-sm font-bold text-blue hover:bg-white/90"
+          >
+            Sign out
+          </button>
+        </form>
+      </div>
     </header>
   );
 }

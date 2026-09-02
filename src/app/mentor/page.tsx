@@ -22,11 +22,11 @@ export default async function MentorPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header title="My Students" userName={session.user.name ?? ""} />
 
       <main className="mx-auto max-w-2xl px-4 py-8">
-        <p className="mb-4 text-sm text-gray-500">
+        <p className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
           Week of {formatWeekLabel(currentWeek)}
         </p>
         {students.length === 0 && (
@@ -41,16 +41,14 @@ export default async function MentorPage() {
               <Link
                 key={s.id}
                 href={`/mentor/${s.id}`}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm hover:border-gray-300"
+                className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:border-blue"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {s.name}
-                  </p>
+                  <p className="text-sm font-bold text-navy">{s.name}</p>
                   <p className="text-xs text-gray-500">{s.email}</p>
                 </div>
                 <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                  className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
                     submitted
                       ? "bg-green-100 text-green-700"
                       : "bg-gray-100 text-gray-500"

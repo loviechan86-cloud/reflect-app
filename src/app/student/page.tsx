@@ -41,52 +41,55 @@ export default async function StudentPage() {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header title="My Reflections" userName={session.user.name ?? ""} />
 
       <main className="mx-auto max-w-2xl space-y-8 px-4 py-8">
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-1 text-sm font-medium text-gray-900">
-            This week &middot; {formatWeekLabel(currentWeek)}
-          </h2>
-          <p className="mb-4 text-sm text-gray-500">
-            {thisWeek
-              ? "You can still edit your reflection for this week."
-              : "What went well? What was hard? What do you need help with?"}
-          </p>
-          <form action={submitReflection} className="space-y-3">
-            <textarea
-              name="content"
-              required
-              rows={6}
-              defaultValue={thisWeek?.content ?? ""}
-              className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-gray-900 focus:outline-none"
-              placeholder="Write your reflection..."
-            />
-            <button
-              type="submit"
-              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-            >
-              {thisWeek ? "Update reflection" : "Submit reflection"}
-            </button>
-          </form>
+        <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="h-1.5 bg-cta" />
+          <div className="p-6">
+            <h2 className="mb-1 text-xs font-bold tracking-wide text-blue uppercase">
+              This week &middot; {formatWeekLabel(currentWeek)}
+            </h2>
+            <p className="mb-4 text-sm text-gray-500">
+              {thisWeek
+                ? "You can still edit your reflection for this week."
+                : "What went well? What was hard? What do you need help with?"}
+            </p>
+            <form action={submitReflection} className="space-y-3">
+              <textarea
+                name="content"
+                required
+                rows={6}
+                defaultValue={thisWeek?.content ?? ""}
+                className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-blue focus:outline-none"
+                placeholder="Write your reflection..."
+              />
+              <button
+                type="submit"
+                className="rounded-full bg-cta px-5 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
+              >
+                {thisWeek ? "Update reflection" : "Submit reflection"}
+              </button>
+            </form>
 
-          {thisWeek && thisWeek.comments.length > 0 && (
-            <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
-              {thisWeek.comments.map((c) => (
-                <div key={c.id} className="text-sm">
-                  <span className="font-medium text-gray-900">
-                    {c.mentor.name}:
-                  </span>{" "}
-                  <span className="text-gray-700">{c.content}</span>
-                </div>
-              ))}
-            </div>
-          )}
+            {thisWeek && thisWeek.comments.length > 0 && (
+              <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
+                {thisWeek.comments.map((c) => (
+                  <div key={c.id} className="text-sm">
+                    <span className="font-bold text-navy">
+                      {c.mentor.name}:
+                    </span>{" "}
+                    <span className="text-gray-700">{c.content}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         <section>
-          <h2 className="mb-3 text-sm font-medium text-gray-900">
+          <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
             Past reflections
           </h2>
           {history.length === 0 && (
@@ -96,9 +99,9 @@ export default async function StudentPage() {
             {history.map((r) => (
               <div
                 key={r.id}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
               >
-                <p className="mb-2 text-xs font-medium text-gray-500">
+                <p className="mb-2 text-xs font-bold text-gray-500">
                   {formatWeekLabel(r.weekOf)}
                 </p>
                 <p className="whitespace-pre-wrap text-sm text-gray-800">
@@ -109,7 +112,7 @@ export default async function StudentPage() {
                   <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
                     {r.comments.map((c) => (
                       <div key={c.id} className="text-sm">
-                        <span className="font-medium text-gray-900">
+                        <span className="font-bold text-navy">
                           {c.mentor.name}:
                         </span>{" "}
                         <span className="text-gray-700">{c.content}</span>

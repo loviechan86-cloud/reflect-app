@@ -24,14 +24,14 @@ export function CreateUserForm({
         name="name"
         placeholder="Full name"
         required
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
       />
       <input
         name="email"
         type="email"
         placeholder="Email"
         required
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
       />
       <input
         name="password"
@@ -39,13 +39,13 @@ export function CreateUserForm({
         placeholder="Temporary password (min 8 chars)"
         required
         minLength={8}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
       />
       <select
         name="role"
         value={role}
         onChange={(e) => setRole(e.target.value as typeof role)}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none"
+        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
       >
         <option value="STUDENT">Student</option>
         <option value="MENTOR">Mentor</option>
@@ -55,7 +55,7 @@ export function CreateUserForm({
       {role === "STUDENT" && (
         <select
           name="mentorId"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-gray-900 focus:outline-none sm:col-span-2"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none sm:col-span-2"
           defaultValue=""
         >
           <option value="">No mentor assigned yet</option>
@@ -74,7 +74,7 @@ export function CreateUserForm({
       <button
         type="submit"
         disabled={pending}
-        className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50 sm:col-span-2"
+        className="rounded-full bg-cta px-4 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark disabled:opacity-50 sm:col-span-2"
       >
         {pending ? "Creating..." : "Create account"}
       </button>

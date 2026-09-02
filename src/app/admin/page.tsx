@@ -18,33 +18,34 @@ export default async function AdminPage() {
   const admins = users.filter((u) => u.role === "ADMIN");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header title="Admin" userName={session.user.name ?? ""} />
 
       <main className="mx-auto max-w-3xl space-y-8 px-4 py-8">
-        <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-sm font-medium text-gray-900">
-            Create account
-          </h2>
-          <CreateUserForm
-            mentors={mentors.map((m) => ({ id: m.id, name: m.name }))}
-          />
+        <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="h-1.5 bg-cta" />
+          <div className="p-6">
+            <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
+              Create account
+            </h2>
+            <CreateUserForm
+              mentors={mentors.map((m) => ({ id: m.id, name: m.name }))}
+            />
+          </div>
         </section>
 
         <section>
-          <h2 className="mb-3 text-sm font-medium text-gray-900">
+          <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
             Students ({students.length})
           </h2>
           <div className="space-y-2">
             {students.map((s) => (
               <div
                 key={s.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {s.name}
-                  </p>
+                  <p className="text-sm font-bold text-navy">{s.name}</p>
                   <p className="text-xs text-gray-500">{s.email}</p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -64,19 +65,17 @@ export default async function AdminPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-sm font-medium text-gray-900">
+          <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
             Mentors ({mentors.length})
           </h2>
           <div className="space-y-2">
             {mentors.map((m) => (
               <div
                 key={m.id}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+                className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {m.name}
-                  </p>
+                  <p className="text-sm font-bold text-navy">{m.name}</p>
                   <p className="text-xs text-gray-500">{m.email}</p>
                 </div>
                 <DeleteButton userId={m.id} />
@@ -89,20 +88,22 @@ export default async function AdminPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-sm font-medium text-gray-900">
+          <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
             Admins ({admins.length})
           </h2>
           <div className="space-y-2">
             {admins.map((a) => (
               <div
                 key={a.id}
-                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+                className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-bold text-navy">
                     {a.name}
                     {a.id === session.user.id && (
-                      <span className="ml-2 text-xs text-gray-400">(you)</span>
+                      <span className="ml-2 text-xs font-normal text-gray-400">
+                        (you)
+                      </span>
                     )}
                   </p>
                   <p className="text-xs text-gray-500">{a.email}</p>
@@ -123,7 +124,7 @@ function DeleteButton({ userId }: { userId: string }) {
       <input type="hidden" name="userId" value={userId} />
       <button
         type="submit"
-        className="rounded-lg border border-red-200 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
+        className="rounded-full border border-red-200 px-3 py-1.5 text-sm font-bold text-red-600 uppercase tracking-wide hover:bg-red-50"
       >
         Remove
       </button>

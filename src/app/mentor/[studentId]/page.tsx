@@ -32,13 +32,13 @@ export default async function StudentDetailPage({
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header title={student.name} userName={session.user.name ?? ""} />
 
       <main className="mx-auto max-w-2xl px-4 py-8">
         <Link
           href="/mentor"
-          className="mb-4 inline-block text-sm text-gray-500 hover:text-gray-800"
+          className="mb-4 inline-block text-sm font-bold text-blue hover:text-navy"
         >
           &larr; All students
         </Link>
@@ -51,9 +51,9 @@ export default async function StudentDetailPage({
           {reflections.map((r) => (
             <div
               key={r.id}
-              className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
             >
-              <p className="mb-2 text-xs font-medium text-gray-500">
+              <p className="mb-2 text-xs font-bold text-gray-500">
                 {formatWeekLabel(r.weekOf)}
               </p>
               <p className="whitespace-pre-wrap text-sm text-gray-800">
@@ -64,7 +64,7 @@ export default async function StudentDetailPage({
                 <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
                   {r.comments.map((c) => (
                     <div key={c.id} className="text-sm">
-                      <span className="font-medium text-gray-900">
+                      <span className="font-bold text-navy">
                         {c.mentor.name}:
                       </span>{" "}
                       <span className="text-gray-700">{c.content}</span>
@@ -83,11 +83,11 @@ export default async function StudentDetailPage({
                   name="content"
                   placeholder="Leave a comment..."
                   required
-                  className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-gray-900 focus:outline-none"
+                  className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="rounded-lg bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-800"
+                  className="rounded-full bg-cta px-4 py-1.5 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
                 >
                   Reply
                 </button>
