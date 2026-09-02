@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  STUDENT
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  // If role == STUDENT, this points at their mentor.
+  mentorId String?
+  mentor   User?   @relation("MentorToStudents", fields: [mentorId], references: [id])
+  students User[]  @relation("MentorToStudents")
+
+  reflections Reflection[] @relation("StudentReflections")
+  comments    Comment[]    @relation("MentorComments")
+}
+
+model Reflection {
+  id        String   @id @default(cuid())
+  content   String
+  weekOf    DateTime // Monday of the week this reflection covers
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studentId String
+  student   User   @relation("StudentReflections", fields: [studentId], references: [id], onDelete: Cascade)
+
+  comments Comment[]
+
+  @@unique([studentId, weekOf])
+  @@index([studentId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  reflectionId String
+  reflection   Reflection @relation(fields: [reflectionId], references: [id], onDelete: Cascade)
+
+  mentorId String
+  mentor   User   @relation("MentorComments", fields: [mentorId], references: [id])
+
+  @@index([reflectionId])
+}
