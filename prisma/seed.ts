@@ -16,16 +16,16 @@ async function main() {
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    console.log(`Admin account for ${email} already exists, skipping.`);
+    console.log(`Staff account for ${email} already exists, skipping.`);
     return;
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
   await prisma.user.create({
-    data: { name, email, passwordHash, role: "ADMIN" },
+    data: { name, email, passwordHash, role: "STAFF" },
   });
 
-  console.log(`Created admin account: ${email}`);
+  console.log(`Created staff account: ${email}`);
 }
 
 main()

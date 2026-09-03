@@ -2,8 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 
 const roleHome: Record<string, string> = {
-  ADMIN: "/admin",
-  MENTOR: "/mentor",
+  STAFF: "/dashboard",
   STUDENT: "/student",
 };
 

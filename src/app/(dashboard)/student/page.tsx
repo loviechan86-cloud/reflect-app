@@ -19,7 +19,7 @@ export default async function StudentPage() {
       },
       include: {
         comments: {
-          include: { mentor: { select: { name: true } } },
+          include: { staff: { select: { name: true } } },
           orderBy: { createdAt: "asc" },
         },
       },
@@ -32,7 +32,7 @@ export default async function StudentPage() {
       orderBy: { weekOf: "desc" },
       include: {
         comments: {
-          include: { mentor: { select: { name: true } } },
+          include: { staff: { select: { name: true } } },
           orderBy: { createdAt: "asc" },
         },
       },
@@ -77,7 +77,7 @@ export default async function StudentPage() {
             <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
               {thisWeek.comments.map((c) => (
                 <div key={c.id} className="text-sm">
-                  <span className="font-bold text-navy">{c.mentor.name}:</span>{" "}
+                  <span className="font-bold text-navy">{c.staff.name}:</span>{" "}
                   <span className="text-gray-700">{c.content}</span>
                 </div>
               ))}
@@ -111,7 +111,7 @@ export default async function StudentPage() {
                   {r.comments.map((c) => (
                     <div key={c.id} className="text-sm">
                       <span className="font-bold text-navy">
-                        {c.mentor.name}:
+                        {c.staff.name}:
                       </span>{" "}
                       <span className="text-gray-700">{c.content}</span>
                     </div>

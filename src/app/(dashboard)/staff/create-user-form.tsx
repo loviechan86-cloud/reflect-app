@@ -1,18 +1,13 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { createUser } from "./actions";
 
-export function CreateUserForm({
-  mentors,
-}: {
-  mentors: { id: string; name: string }[];
-}) {
+export function CreateUserForm() {
   const [state, formAction, pending] = useActionState(createUser, {
     error: null,
     successAt: 0,
   });
-  const [role, setRole] = useState<"ADMIN" | "MENTOR" | "STUDENT">("STUDENT");
 
   return (
     <form
@@ -43,29 +38,12 @@ export function CreateUserForm({
       />
       <select
         name="role"
-        value={role}
-        onChange={(e) => setRole(e.target.value as typeof role)}
+        defaultValue="STUDENT"
         className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
       >
         <option value="STUDENT">Student</option>
-        <option value="MENTOR">Mentor</option>
-        <option value="ADMIN">Admin</option>
+        <option value="STAFF">Staff</option>
       </select>
-
-      {role === "STUDENT" && (
-        <select
-          name="mentorId"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none sm:col-span-2"
-          defaultValue=""
-        >
-          <option value="">No mentor assigned yet</option>
-          {mentors.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.name}
-            </option>
-          ))}
-        </select>
-      )}
 
       {state.error && (
         <p className="text-sm text-red-600 sm:col-span-2">{state.error}</p>

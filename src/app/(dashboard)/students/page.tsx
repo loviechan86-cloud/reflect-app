@@ -3,14 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { weekStart, formatWeekLabel } from "@/lib/week";
 import Link from "next/link";
 
-export default async function MentorPage() {
+export default async function StudentsPage() {
   const session = await auth();
   if (!session) return null;
 
   const currentWeek = weekStart(new Date());
 
   const students = await prisma.user.findMany({
-    where: { mentorId: session.user.id, role: "STUDENT" },
+    where: { role: "STUDENT" },
     orderBy: { name: "asc" },
     include: {
       reflections: {
@@ -23,15 +23,13 @@ export default async function MentorPage() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-8 lg:py-10">
       <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
-        My Students
+        Students
       </h1>
       <p className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
         Week of {formatWeekLabel(currentWeek)}
       </p>
       {students.length === 0 && (
-        <p className="text-sm text-gray-500">
-          No students assigned to you yet.
-        </p>
+        <p className="text-sm text-gray-500">No students yet.</p>
       )}
       <div className="space-y-3">
         {students.map((s) => {
@@ -39,7 +37,7 @@ export default async function MentorPage() {
           return (
             <Link
               key={s.id}
-              href={`/mentor/${s.id}`}
+              href={`/students/${s.id}`}
               className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:border-blue"
             >
               <div>

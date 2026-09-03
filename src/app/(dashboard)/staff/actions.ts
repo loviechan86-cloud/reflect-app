@@ -5,9 +5,9 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
-async function requireAdmin() {
+async function requireStaff() {
   const session = await auth();
-  if (!session || session.user.role !== "ADMIN") {
+  if (!session || session.user.role !== "STAFF") {
     throw new Error("Not authorized");
   }
   return session;
@@ -17,7 +17,7 @@ export async function createUser(
   prevState: { error: string | null; successAt: number },
   formData: FormData,
 ): Promise<{ error: string | null; successAt: number }> {
-  await requireAdmin();
+  await requireStaff();
 
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "")
@@ -25,8 +25,8 @@ export async function createUser(
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
   const role = String(formData.get("role") ?? "STUDENT") as
-    "ADMIN" | "MENTOR" | "STUDENT";
-  const mentorId = String(formData.get("mentorId") ?? "") || null;
+    | "STAFF"
+    | "STUDENT";
 
   if (!name || !email || password.length < 8) {
     return {
@@ -47,41 +47,20 @@ export async function createUser(
   const passwordHash = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
-    data: {
-      name,
-      email,
-      passwordHash,
-      role,
-      mentorId: role === "STUDENT" ? mentorId : null,
-    },
+    data: { name, email, passwordHash, role },
   });
 
-  revalidatePath("/admin");
+  revalidatePath("/staff");
   return { error: null, successAt: Date.now() };
 }
 
-export async function updateStudentMentor(formData: FormData) {
-  await requireAdmin();
-
-  const studentId = String(formData.get("studentId") ?? "");
-  const mentorId = String(formData.get("mentorId") ?? "") || null;
-  if (!studentId) return;
-
-  await prisma.user.update({
-    where: { id: studentId, role: "STUDENT" },
-    data: { mentorId },
-  });
-
-  revalidatePath("/admin");
-}
-
 export async function deleteUser(formData: FormData) {
-  const session = await requireAdmin();
+  const session = await requireStaff();
 
   const userId = String(formData.get("userId") ?? "");
   if (!userId || userId === session.user.id) return;
 
   await prisma.user.delete({ where: { id: userId } });
 
-  revalidatePath("/admin");
+  revalidatePath("/staff");
 }

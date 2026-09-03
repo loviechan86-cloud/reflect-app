@@ -8,8 +8,7 @@ datasource db {
 }
 
 enum Role {
-  ADMIN
-  MENTOR
+  STAFF
   STUDENT
 }
 
@@ -21,13 +20,8 @@ model User {
   role         Role
   createdAt    DateTime @default(now())
 
-  // If role == STUDENT, this points at their mentor.
-  mentorId String?
-  mentor   User?   @relation("MentorToStudents", fields: [mentorId], references: [id])
-  students User[]  @relation("MentorToStudents")
-
   reflections Reflection[] @relation("StudentReflections")
-  comments    Comment[]    @relation("MentorComments")
+  comments    Comment[]    @relation("StaffComments")
 }
 
 model Reflection {
@@ -54,8 +48,8 @@ model Comment {
   reflectionId String
   reflection   Reflection @relation(fields: [reflectionId], references: [id], onDelete: Cascade)
 
-  mentorId String
-  mentor   User   @relation("MentorComments", fields: [mentorId], references: [id])
+  staffId String
+  staff   User   @relation("StaffComments", fields: [staffId], references: [id])
 
   @@index([reflectionId])
 }

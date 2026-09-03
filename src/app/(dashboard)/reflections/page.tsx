@@ -1,30 +1,20 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatWeekLabel } from "@/lib/week";
-import { addComment } from "../actions";
+import { addComment } from "../students/actions";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
-export default async function StudentDetailPage({
-  params,
-}: {
-  params: Promise<{ studentId: string }>;
-}) {
+export default async function ReflectionsPage() {
   const session = await auth();
   if (!session) return null;
-  const { studentId } = await params;
-
-  const student = await prisma.user.findUnique({
-    where: { id: studentId, mentorId: session.user.id, role: "STUDENT" },
-  });
-  if (!student) notFound();
 
   const reflections = await prisma.reflection.findMany({
-    where: { studentId },
-    orderBy: { weekOf: "desc" },
+    orderBy: { updatedAt: "desc" },
+    take: 30,
     include: {
+      student: { select: { id: true, name: true } },
       comments: {
-        include: { mentor: { select: { name: true } } },
+        include: { staff: { select: { name: true } } },
         orderBy: { createdAt: "asc" },
       },
     },
@@ -32,19 +22,12 @@ export default async function StudentDetailPage({
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-8 lg:py-10">
-      <Link
-        href="/mentor"
-        className="mb-4 inline-block text-sm font-bold text-blue hover:text-navy"
-      >
-        &larr; All students
-      </Link>
-
       <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
-        {student.name}
+        Reflections
       </h1>
 
       {reflections.length === 0 && (
-        <p className="text-sm text-gray-500">No reflections yet.</p>
+        <p className="text-sm text-gray-500">No reflections submitted yet.</p>
       )}
 
       <div className="space-y-4">
@@ -53,9 +36,17 @@ export default async function StudentDetailPage({
             key={r.id}
             className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
           >
-            <p className="mb-2 text-xs font-bold text-gray-500">
-              {formatWeekLabel(r.weekOf)}
-            </p>
+            <div className="mb-2 flex items-center justify-between">
+              <Link
+                href={`/students/${r.student.id}`}
+                className="text-sm font-bold text-navy hover:text-blue"
+              >
+                {r.student.name}
+              </Link>
+              <p className="text-xs font-bold text-gray-500">
+                {formatWeekLabel(r.weekOf)}
+              </p>
+            </div>
             <p className="whitespace-pre-wrap text-sm text-gray-800">
               {r.content}
             </p>
@@ -65,7 +56,7 @@ export default async function StudentDetailPage({
                 {r.comments.map((c) => (
                   <div key={c.id} className="text-sm">
                     <span className="font-bold text-navy">
-                      {c.mentor.name}:
+                      {c.staff.name}:
                     </span>{" "}
                     <span className="text-gray-700">{c.content}</span>
                   </div>
@@ -78,7 +69,7 @@ export default async function StudentDetailPage({
               className="mt-4 flex gap-2 border-t border-gray-100 pt-3"
             >
               <input type="hidden" name="reflectionId" value={r.id} />
-              <input type="hidden" name="studentId" value={studentId} />
+              <input type="hidden" name="studentId" value={r.student.id} />
               <input
                 name="content"
                 placeholder="Leave a comment..."
