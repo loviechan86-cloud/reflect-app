@@ -33,26 +33,6 @@ function LockIcon() {
   );
 }
 
-function GlobeWireframe({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 400 240"
-      className={className}
-      fill="none"
-      stroke="white"
-      strokeOpacity="0.22"
-      strokeWidth="1"
-    >
-      <ellipse cx="200" cy="120" rx="190" ry="110" />
-      <ellipse cx="200" cy="120" rx="80" ry="110" />
-      <ellipse cx="200" cy="120" rx="140" ry="110" />
-      <ellipse cx="200" cy="120" rx="190" ry="46" />
-      <ellipse cx="200" cy="120" rx="190" ry="78" />
-      <line x1="10" y1="120" x2="390" y2="120" />
-    </svg>
-  );
-}
-
 function TornEdgeVertical() {
   return (
     <svg
@@ -121,20 +101,12 @@ export default function LoginPage() {
         </p>
 
         <div className="relative flex flex-1 flex-col items-center justify-center py-6 text-center">
-          <div className="relative flex w-full max-w-[420px] items-center justify-center">
-            <GlobeWireframe className="w-full" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/apprentice-wordmark.png"
-              alt="APPRENTICE"
-              className="absolute w-[78%] drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]"
-            />
-          </div>
-          <div className="mt-6 h-px w-14 bg-white/25" />
-          <p className="mt-5 max-w-[30ch] text-[11px] font-semibold leading-relaxed tracking-[0.16em] text-white/60 uppercase">
-            Christ&#8209;Centred · Spirit&#8209;Empowered · Socially
-            Responsible · Mission&#8209;Driven
-          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/apprentice-logo-official.png"
+            alt="APPRENTICE — Christ-Centred, Spirit-Empowered, Socially Responsible, Mission-Driven"
+            className="w-full max-w-[440px] drop-shadow-[0_10px_26px_rgba(0,0,0,0.35)]"
+          />
         </div>
 
         <p className="relative text-sm text-white/45">
