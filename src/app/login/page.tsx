@@ -33,33 +33,34 @@ function LockIcon() {
   );
 }
 
+// Tileable torn-paper edges: a fixed-size jagged tile repeated with
+// background-size/repeat, so the tooth size stays consistent no matter
+// how tall (desktop) or wide (mobile) the panel is.
+const TORN_EDGE_COLOR = "%23f4f7fb"; // must match --background literally (data URIs can't read CSS vars)
+
 function TornEdgeVertical() {
   return (
-    <svg
-      viewBox="0 0 24 400"
-      preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-y-0 right-0 hidden w-6 text-background lg:block"
-    >
-      <polygon
-        fill="currentColor"
-        points="14,0 6,28 19,52 3,80 17,108 8,140 21,168 4,196 16,224 9,252 22,280 5,308 18,336 7,364 15,392 13,400 24,400 24,0"
-      />
-    </svg>
+    <div
+      className="pointer-events-none absolute inset-y-0 right-0 hidden w-6 lg:block"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='40'%3E%3Cpolygon fill='${TORN_EDGE_COLOR}' points='14,0 6,10 18,20 4,30 14,40 24,40 24,0'/%3E%3C/svg%3E")`,
+        backgroundRepeat: "repeat-y",
+        backgroundSize: "24px 40px",
+      }}
+    />
   );
 }
 
 function TornEdgeHorizontal() {
   return (
-    <svg
-      viewBox="0 0 400 24"
-      preserveAspectRatio="none"
-      className="pointer-events-none absolute inset-x-0 bottom-0 block h-6 w-full text-background lg:hidden"
-    >
-      <polygon
-        fill="currentColor"
-        points="0,14 28,6 52,19 80,3 108,17 140,8 168,21 196,4 224,16 252,9 280,22 308,5 336,18 364,7 392,15 400,13 400,24 0,24"
-      />
-    </svg>
+    <div
+      className="pointer-events-none absolute inset-x-0 bottom-0 block h-6 w-full lg:hidden"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='24'%3E%3Cpolygon fill='${TORN_EDGE_COLOR}' points='0,14 10,6 20,18 30,4 40,14 40,24 0,24'/%3E%3C/svg%3E")`,
+        backgroundRepeat: "repeat-x",
+        backgroundSize: "40px 24px",
+      }}
+    />
   );
 }
 
