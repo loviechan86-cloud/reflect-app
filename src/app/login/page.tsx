@@ -3,23 +3,6 @@
 import { useActionState } from "react";
 import { loginAction } from "./actions";
 
-function GlobeMark() {
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      className="h-14 w-14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-    >
-      <circle cx="32" cy="32" r="21" />
-      <ellipse cx="32" cy="32" rx="9" ry="21" />
-      <ellipse cx="32" cy="32" rx="21" ry="9" transform="rotate(28 32 32)" />
-      <ellipse cx="32" cy="32" rx="21" ry="9" transform="rotate(-28 32 32)" />
-    </svg>
-  );
-}
-
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, {
     error: null,
@@ -43,25 +26,21 @@ export default function LoginPage() {
       />
 
       <div className="relative mb-7 flex flex-col items-center text-center">
-        <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full border border-white/25 text-white/90">
-          <GlobeMark />
-        </div>
-        <p className="text-sm font-bold tracking-[0.2em] text-white/70 uppercase">
+        <p className="mb-2 text-sm font-bold tracking-[0.2em] text-white/70 uppercase">
           Every Nation Malaysia
         </p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
-          APPRENTICE
-        </h1>
-        <p className="mt-1 text-sm text-white/60">Weekly Reflections</p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/apprentice-mark.png"
+          alt="APPRENTICE"
+          className="h-20 w-auto drop-shadow-sm"
+        />
+        <p className="mt-2 text-sm text-white/60">Weekly Reflections</p>
       </div>
 
       <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
         <div className="h-2 bg-cta" />
         <div className="p-8">
-          <p className="mb-6 text-sm text-gray-500">
-            Sign in with the email and password your admin gave you.
-          </p>
-
           <form action={formAction} className="space-y-4">
             <div>
               <label
