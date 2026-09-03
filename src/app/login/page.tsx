@@ -41,7 +41,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Brand band */}
-      <div className="relative flex h-[22vh] min-h-[150px] items-center justify-center overflow-hidden bg-navy px-6">
+      <div className="relative flex h-[34vh] min-h-[260px] flex-col items-center justify-center gap-3 overflow-hidden bg-navy px-6 py-8">
         <div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -57,12 +57,18 @@ export default function LoginPage() {
               "linear-gradient(165deg, rgba(18,54,61,0.92) 0%, rgba(27,74,82,0.85) 55%, rgba(47,109,119,0.80) 140%)",
           }}
         />
+        <p className="relative text-xs font-bold tracking-[0.3em] text-white/60 uppercase">
+          Every Nation Malaysia
+        </p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/apprentice-logo-official.png"
-          alt="APPRENTICE — Every Nation Malaysia"
-          className="relative h-16 w-auto sm:h-20"
+          alt="APPRENTICE"
+          className="relative h-24 w-auto sm:h-28 lg:h-32"
         />
+        <p className="relative text-sm text-white/50">
+          Weekly Reflections — growing deeper, one week at a time.
+        </p>
       </div>
 
       {/* Form panel */}
