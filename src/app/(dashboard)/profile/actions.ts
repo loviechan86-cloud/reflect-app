@@ -12,7 +12,7 @@ export type ProfileState = {
 
 export async function updateProfile(
   _prevState: ProfileState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ProfileState> {
   const session = await auth();
   if (!session) throw new Error("Not authorized");
@@ -42,7 +42,7 @@ export async function updateProfile(
 
 export async function changePassword(
   _prevState: ProfileState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ProfileState> {
   const session = await auth();
   if (!session) throw new Error("Not authorized");

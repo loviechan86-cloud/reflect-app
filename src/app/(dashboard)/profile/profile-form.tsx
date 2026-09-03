@@ -1,50 +1,36 @@
 "use client";
 
 import { useActionState } from "react";
-import { changePassword, type ProfileState } from "./actions";
+import { updateProfile, type ProfileState } from "./actions";
 
 const initialState: ProfileState = { error: null, success: null };
 
-export function PasswordForm() {
+export function ProfileForm({ name, email }: { name: string; email: string }) {
   const [state, formAction, pending] = useActionState(
-    changePassword,
-    initialState
+    updateProfile,
+    initialState,
   );
 
   return (
-    <form action={formAction} key={state.success ?? "idle"} className="space-y-3">
+    <form action={formAction} className="space-y-3">
       <div>
         <label className="mb-1 block text-sm font-bold text-navy">
-          Current password
+          Full name
         </label>
         <input
-          name="currentPassword"
-          type="password"
+          name="name"
+          defaultValue={name}
           required
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm font-bold text-navy">
-          New password
-        </label>
+        <label className="mb-1 block text-sm font-bold text-navy">Email</label>
         <input
-          name="newPassword"
-          type="password"
+          name="email"
+          type="email"
+          defaultValue={email}
           required
-          minLength={8}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-sm font-bold text-navy">
-          Confirm new password
-        </label>
-        <input
-          name="confirmPassword"
-          type="password"
-          required
-          minLength={8}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
         />
       </div>
@@ -59,7 +45,7 @@ export function PasswordForm() {
         disabled={pending}
         className="rounded-full bg-cta px-5 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark disabled:opacity-50"
       >
-        {pending ? "Updating..." : "Update password"}
+        {pending ? "Saving..." : "Save changes"}
       </button>
     </form>
   );

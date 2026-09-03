@@ -1,44 +1,54 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateProfile, type ProfileState } from "./actions";
+import { changePassword, type ProfileState } from "./actions";
 
 const initialState: ProfileState = { error: null, success: null };
 
-export function ProfileForm({
-  name,
-  email,
-}: {
-  name: string;
-  email: string;
-}) {
+export function PasswordForm() {
   const [state, formAction, pending] = useActionState(
-    updateProfile,
-    initialState
+    changePassword,
+    initialState,
   );
 
   return (
-    <form action={formAction} className="space-y-3">
+    <form
+      action={formAction}
+      key={state.success ?? "idle"}
+      className="space-y-3"
+    >
       <div>
         <label className="mb-1 block text-sm font-bold text-navy">
-          Full name
+          Current password
         </label>
         <input
-          name="name"
-          defaultValue={name}
+          name="currentPassword"
+          type="password"
           required
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
         />
       </div>
       <div>
         <label className="mb-1 block text-sm font-bold text-navy">
-          Email
+          New password
         </label>
         <input
-          name="email"
-          type="email"
-          defaultValue={email}
+          name="newPassword"
+          type="password"
           required
+          minLength={8}
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
+        />
+      </div>
+      <div>
+        <label className="mb-1 block text-sm font-bold text-navy">
+          Confirm new password
+        </label>
+        <input
+          name="confirmPassword"
+          type="password"
+          required
+          minLength={8}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
         />
       </div>
@@ -53,7 +63,7 @@ export function ProfileForm({
         disabled={pending}
         className="rounded-full bg-cta px-5 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark disabled:opacity-50"
       >
-        {pending ? "Saving..." : "Save changes"}
+        {pending ? "Updating..." : "Update password"}
       </button>
     </form>
   );

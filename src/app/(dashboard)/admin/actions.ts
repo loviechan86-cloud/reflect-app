@@ -15,7 +15,7 @@ async function requireAdmin() {
 
 export async function createUser(
   prevState: { error: string | null; successAt: number },
-  formData: FormData
+  formData: FormData,
 ): Promise<{ error: string | null; successAt: number }> {
   await requireAdmin();
 
@@ -25,21 +25,23 @@ export async function createUser(
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
   const role = String(formData.get("role") ?? "STUDENT") as
-    | "ADMIN"
-    | "MENTOR"
-    | "STUDENT";
+    "ADMIN" | "MENTOR" | "STUDENT";
   const mentorId = String(formData.get("mentorId") ?? "") || null;
 
   if (!name || !email || password.length < 8) {
     return {
-      error: "Name, email, and a password of at least 8 characters are required.",
+      error:
+        "Name, email, and a password of at least 8 characters are required.",
       successAt: prevState.successAt,
     };
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { error: "A user with that email already exists.", successAt: prevState.successAt };
+    return {
+      error: "A user with that email already exists.",
+      successAt: prevState.successAt,
+    };
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
