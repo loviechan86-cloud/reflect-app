@@ -75,8 +75,16 @@ export default function LoginPage() {
         <div
           className="pointer-events-none absolute inset-0"
           style={{
+            backgroundImage: "url('/hero-duotone.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
             backgroundImage:
-              "radial-gradient(circle at 18% 12%, rgba(255,255,255,0.14), transparent 42%), radial-gradient(circle at 88% 92%, rgba(255,255,255,0.10), transparent 48%), linear-gradient(160deg, var(--color-navy) 0%, var(--color-blue) 55%, var(--color-cta) 145%)",
+              "radial-gradient(circle at 18% 12%, rgba(255,255,255,0.16), transparent 42%), radial-gradient(circle at 88% 92%, rgba(255,255,255,0.10), transparent 48%), linear-gradient(165deg, rgba(18,54,61,0.90) 0%, rgba(27,74,82,0.82) 55%, rgba(47,109,119,0.78) 140%)",
           }}
         />
         <div
@@ -86,10 +94,11 @@ export default function LoginPage() {
           }}
         />
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.08] mix-blend-overlay"
+          className="pointer-events-none absolute inset-0 opacity-[0.16] mix-blend-overlay"
           style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+            backgroundImage: "url('/grain-texture.jpg')",
+            backgroundSize: "320px auto",
+            backgroundRepeat: "repeat",
           }}
         />
 
