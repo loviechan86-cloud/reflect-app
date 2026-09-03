@@ -64,6 +64,27 @@ function TornEdgeHorizontal() {
   );
 }
 
+function PaperScrap({
+  className,
+  flip = false,
+}: {
+  className?: string;
+  flip?: boolean;
+}) {
+  return (
+    <svg
+      viewBox="0 0 200 200"
+      className={className}
+      style={{ transform: flip ? "scaleX(-1) scaleY(-1)" : undefined }}
+    >
+      <polygon
+        fill="#f4f7fb"
+        points="200,0 200,140 182,119 168,144 151,124 133,149 118,127 96,153 82,129 61,156 46,131 24,158 9,134 0,148 0,0"
+      />
+    </svg>
+  );
+}
+
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, {
     error: null,
@@ -106,6 +127,12 @@ export default function LoginPage() {
         <TornEdgeVertical />
         <TornEdgeHorizontal />
 
+        <PaperScrap className="pointer-events-none absolute -top-3 -right-3 h-28 w-28 -rotate-6 opacity-90 drop-shadow-[0_6px_10px_rgba(0,0,0,0.25)] lg:h-36 lg:w-36" />
+        <PaperScrap
+          flip
+          className="pointer-events-none absolute -bottom-3 -left-3 h-14 w-14 rotate-3 opacity-90 drop-shadow-[0_-4px_10px_rgba(0,0,0,0.2)] lg:h-20 lg:w-20"
+        />
+
         <p className="relative text-xs font-bold tracking-[0.3em] text-white/55 uppercase">
           Every Nation Malaysia
         </p>
@@ -119,7 +146,7 @@ export default function LoginPage() {
           />
         </div>
 
-        <p className="relative text-sm text-white/45">
+        <p className="relative pl-8 text-sm text-white/45 lg:pl-10">
           Weekly Reflections — growing deeper, one week at a time.
         </p>
       </div>
