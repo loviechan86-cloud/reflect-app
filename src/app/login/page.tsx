@@ -158,13 +158,31 @@ export default function LoginPage() {
       </div>
 
       {/* Form panel */}
-      <div className="flex flex-1 items-center justify-center bg-background px-6 py-14 lg:px-16">
-        <div className="w-full max-w-sm">
-          <div className="mb-5 h-1.5 w-10 rounded-full bg-cta" />
+      <div className="relative flex flex-1 items-center justify-center overflow-hidden bg-background px-6 py-14 lg:px-16">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 85% -10%, rgba(47,109,119,0.08), transparent 45%), radial-gradient(circle at -10% 110%, rgba(18,54,61,0.06), transparent 40%)",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-multiply"
+          style={{
+            backgroundImage: "url('/grain-texture.jpg')",
+            backgroundSize: "320px auto",
+            backgroundRepeat: "repeat",
+          }}
+        />
+
+        <div className="relative w-full max-w-sm">
+          <p className="mb-3 text-xs font-bold tracking-[0.3em] text-cta uppercase">
+            Account Access
+          </p>
           <h1 className="text-3xl font-extrabold tracking-tight text-navy">
             Welcome back
           </h1>
-          <p className="mt-2 mb-9 text-sm text-gray-500">
+          <p className="mt-2 mb-9 text-sm text-[#5c6e6f]">
             Sign in to continue to your reflections.
           </p>
 
@@ -176,7 +194,7 @@ export default function LoginPage() {
               >
                 Email
               </label>
-              <div className="flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-3.5 py-2.5 shadow-sm transition focus-within:border-blue focus-within:ring-4 focus-within:ring-blue/10">
+              <div className="flex items-center gap-2 rounded-xl border border-[#dbe6e4] bg-white px-3.5 py-2.5 shadow-[0_1px_2px_rgba(18,54,61,0.04)] transition focus-within:border-cta focus-within:shadow-[0_0_0_4px_rgba(47,109,119,0.12)]">
                 <MailIcon />
                 <input
                   id="email"
@@ -184,7 +202,7 @@ export default function LoginPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  className="w-full text-sm focus:outline-none"
+                  className="w-full text-sm text-navy placeholder:text-[#9db0af] focus:outline-none"
                 />
               </div>
             </div>
@@ -196,7 +214,7 @@ export default function LoginPage() {
               >
                 Password
               </label>
-              <div className="flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-3.5 py-2.5 shadow-sm transition focus-within:border-blue focus-within:ring-4 focus-within:ring-blue/10">
+              <div className="flex items-center gap-2 rounded-xl border border-[#dbe6e4] bg-white px-3.5 py-2.5 shadow-[0_1px_2px_rgba(18,54,61,0.04)] transition focus-within:border-cta focus-within:shadow-[0_0_0_4px_rgba(47,109,119,0.12)]">
                 <LockIcon />
                 <input
                   id="password"
@@ -204,7 +222,7 @@ export default function LoginPage() {
                   type="password"
                   required
                   autoComplete="current-password"
-                  className="w-full text-sm focus:outline-none"
+                  className="w-full text-sm text-navy placeholder:text-[#9db0af] focus:outline-none"
                 />
               </div>
             </div>
@@ -216,15 +234,15 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={pending}
-              className="w-full rounded-full bg-cta px-3 py-3 text-sm font-bold text-white uppercase tracking-wide shadow-md transition hover:bg-cta-dark hover:shadow-lg disabled:opacity-50"
+              className="w-full cursor-pointer rounded-full bg-cta px-3 py-3 text-sm font-bold text-white uppercase tracking-wide shadow-md transition hover:bg-cta-dark hover:shadow-lg active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {pending ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          <p className="mt-8 border-t border-gray-200 pt-5 text-center text-xs text-gray-400">
+          <p className="mt-8 border-t border-[#e2e9e8] pt-5 text-center text-xs text-[#8a9c9b]">
             Forgot your password, or don&rsquo;t have an account?{" "}
-            <span className="font-semibold text-gray-500">
+            <span className="font-semibold text-[#5c6e6f]">
               Ask your admin.
             </span>
           </p>
