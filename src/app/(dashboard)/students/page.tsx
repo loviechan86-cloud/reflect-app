@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { weekStart, formatWeekLabel } from "@/lib/week";
+import { weekStart } from "@/lib/week";
 import Link from "next/link";
 
 export default async function StudentsPage() {
@@ -39,14 +39,10 @@ export default async function StudentsPage() {
         </Link>
       </div>
 
-      <p className="mt-4 mb-4 text-xs font-bold tracking-wide text-blue uppercase">
-        Week of {formatWeekLabel(currentWeek)}
-      </p>
-
       {students.length === 0 ? (
-        <p className="text-sm text-gray-500">No students yet.</p>
+        <p className="mt-4 text-sm text-gray-500">No students yet.</p>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
           <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-gray-100 px-5 py-3">
             <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
               Name
