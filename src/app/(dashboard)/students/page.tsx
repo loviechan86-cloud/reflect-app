@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { weekStart, formatWeekLabel } from "@/lib/week";
 import Link from "next/link";
+import { AddStudentForm } from "./add-student-form";
 
 export default async function StudentsPage() {
   const session = await auth();
@@ -21,42 +22,64 @@ export default async function StudentsPage() {
   });
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8 lg:py-10">
-      <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
-        Students
-      </h1>
-      <p className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
+    <main className="mx-auto max-w-3xl px-4 py-8 lg:py-10">
+      <div className="mb-1 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy">
+            Students
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {students.length} {students.length === 1 ? "student" : "students"}
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-4 mb-2 text-xs font-bold tracking-wide text-blue uppercase">
         Week of {formatWeekLabel(currentWeek)}
       </p>
-      {students.length === 0 && (
+
+      <AddStudentForm />
+
+      {students.length === 0 ? (
         <p className="text-sm text-gray-500">No students yet.</p>
+      ) : (
+        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-gray-100 px-5 py-3">
+            <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+              Name
+            </p>
+            <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+              Reflection
+            </p>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {students.map((s) => {
+              const submitted = s.reflections.length > 0;
+              return (
+                <Link
+                  key={s.id}
+                  href={`/students/${s.id}`}
+                  className="grid grid-cols-[1fr_auto] items-center gap-4 px-5 py-3.5 hover:bg-background"
+                >
+                  <div>
+                    <p className="text-sm font-bold text-navy">{s.name}</p>
+                    <p className="text-xs text-gray-500">{s.email}</p>
+                  </div>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
+                      submitted
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-500"
+                    }`}
+                  >
+                    {submitted ? "Submitted" : "Not yet"}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       )}
-      <div className="space-y-3">
-        {students.map((s) => {
-          const submitted = s.reflections.length > 0;
-          return (
-            <Link
-              key={s.id}
-              href={`/students/${s.id}`}
-              className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:border-blue"
-            >
-              <div>
-                <p className="text-sm font-bold text-navy">{s.name}</p>
-                <p className="text-xs text-gray-500">{s.email}</p>
-              </div>
-              <span
-                className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
-                  submitted
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-100 text-gray-500"
-                }`}
-              >
-                {submitted ? "Submitted" : "Not yet"}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
     </main>
   );
 }

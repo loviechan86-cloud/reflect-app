@@ -13,12 +13,17 @@ enum Role {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
   passwordHash String
   name         String
   role         Role
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+
+  // Optional profile fields, mainly filled in for students.
+  phone       String?
+  dateOfBirth DateTime?
+  gender      String?
 
   reflections Reflection[] @relation("StudentReflections")
   comments    Comment[]    @relation("StaffComments")
