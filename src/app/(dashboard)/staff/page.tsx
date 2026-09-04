@@ -32,7 +32,7 @@ export default async function StaffPage() {
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="grid grid-cols-[1.4fr_1.6fr_auto_auto] gap-4 border-b border-gray-100 px-5 py-3">
+        <div className="grid grid-cols-[1.4fr_1.6fr_120px_140px] gap-4 border-b border-gray-100 px-5 py-3">
           <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
             Name
           </p>
@@ -52,7 +52,7 @@ export default async function StaffPage() {
             return (
               <div
                 key={s.id}
-                className="grid grid-cols-[1.4fr_1.6fr_auto_auto] items-center gap-4 px-5 py-3.5"
+                className="grid grid-cols-[1.4fr_1.6fr_120px_140px] items-center gap-4 px-5 py-3.5"
               >
                 <p className="text-sm font-bold text-navy">
                   {s.name}
