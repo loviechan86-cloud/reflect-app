@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { NewStudentForm } from "./new-student-form";
+import { StudentForm } from "../student-form";
+import { createStudent } from "../actions";
 
 export default function NewStudentPage() {
   return (
@@ -15,7 +16,11 @@ export default function NewStudentPage() {
         Add student
       </h1>
 
-      <NewStudentForm />
+      <StudentForm
+        action={createStudent}
+        submitLabel="Create account"
+        pendingLabel="Creating..."
+      />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { formatWeekLabel } from "@/lib/week";
 import { addComment } from "../actions";
 import { StudentProfileGrid } from "@/components/student-profile-fields";
+import { StudentActionBar } from "./student-action-bar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -45,7 +46,14 @@ export default async function StudentDetailPage({
       </h1>
       <p className="mt-1 mb-6 text-sm text-gray-500">
         Student{student.team ? ` · ${student.team}` : ""}
+        {!student.active && (
+          <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600 uppercase">
+            Deactivated
+          </span>
+        )}
       </p>
+
+      <StudentActionBar studentId={studentId} active={student.active} />
 
       <section className="mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="h-1.5 bg-cta" />

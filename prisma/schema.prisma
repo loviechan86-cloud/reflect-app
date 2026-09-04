@@ -24,6 +24,7 @@ model User {
   passwordHash String
   name         String
   role         Role
+  active       Boolean   @default(true)
   createdAt    DateTime  @default(now())
 
   // Optional profile fields, mainly filled in for students.
