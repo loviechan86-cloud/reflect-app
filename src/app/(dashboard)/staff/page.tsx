@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { StaffStatusAction } from "./staff-status-action";
 import Link from "next/link";
 
 export default async function StaffPage() {
@@ -32,7 +31,7 @@ export default async function StaffPage() {
       </div>
 
       <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="grid grid-cols-[1.4fr_1.6fr_120px_140px] gap-4 border-b border-gray-100 px-5 py-3">
+        <div className="grid grid-cols-[1.4fr_1.6fr_auto] gap-4 border-b border-gray-100 px-5 py-3">
           <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
             Name
           </p>
@@ -42,17 +41,15 @@ export default async function StaffPage() {
           <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
             Status
           </p>
-          <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
-            Actions
-          </p>
         </div>
         <div className="divide-y divide-gray-100">
           {staff.map((s) => {
             const isSelf = s.id === session.user.id;
             return (
-              <div
+              <Link
                 key={s.id}
-                className="grid grid-cols-[1.4fr_1.6fr_120px_140px] items-center gap-4 px-5 py-3.5"
+                href={`/staff/${s.id}`}
+                className="grid grid-cols-[1.4fr_1.6fr_auto] items-center gap-4 px-5 py-3.5 hover:bg-background"
               >
                 <p className="text-sm font-bold text-navy">
                   {s.name}
@@ -72,12 +69,7 @@ export default async function StaffPage() {
                 >
                   {s.active ? "Active" : "Deactivated"}
                 </span>
-                {isSelf ? (
-                  <span className="text-xs text-gray-300">&mdash;</span>
-                ) : (
-                  <StaffStatusAction userId={s.id} active={s.active} />
-                )}
-              </div>
+              </Link>
             );
           })}
         </div>
