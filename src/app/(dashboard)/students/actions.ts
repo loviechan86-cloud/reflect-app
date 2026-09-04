@@ -4,14 +4,19 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export type CreateStudentState = {
   error: string | null;
-  successAt: number;
 };
 
+function optional(formData: FormData, key: string): string | null {
+  const value = String(formData.get(key) ?? "").trim();
+  return value === "" ? null : value;
+}
+
 export async function createStudent(
-  prevState: CreateStudentState,
+  _prevState: CreateStudentState,
   formData: FormData,
 ): Promise<CreateStudentState> {
   const session = await auth();
@@ -24,30 +29,35 @@ export async function createStudent(
     .trim()
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
-  const phone = String(formData.get("phone") ?? "").trim();
   const dateOfBirth = String(formData.get("dateOfBirth") ?? "");
-  const gender = String(formData.get("gender") ?? "").trim();
+  const paymentStatus = String(formData.get("paymentStatus") ?? "");
+  const parentName = optional(formData, "parentName");
+  const parentPhone = optional(formData, "parentPhone");
+  const joinDate = String(formData.get("joinDate") ?? "");
+  const emergencyContactName = optional(formData, "emergencyContactName");
+  const emergencyContactPhone = optional(formData, "emergencyContactPhone");
 
   if (
     !name ||
     !email ||
     password.length < 8 ||
-    !phone ||
     !dateOfBirth ||
-    !gender
+    !paymentStatus ||
+    !parentName ||
+    !parentPhone ||
+    !joinDate ||
+    !emergencyContactName ||
+    !emergencyContactPhone
   ) {
     return {
-      error: "Please fill in every field (password needs at least 8 characters).",
-      successAt: prevState.successAt,
+      error:
+        "Please fill in the required fields (marked *) — password needs at least 8 characters.",
     };
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return {
-      error: "A user with that email already exists.",
-      successAt: prevState.successAt,
-    };
+    return { error: "A user with that email already exists." };
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
@@ -58,14 +68,30 @@ export async function createStudent(
       email,
       passwordHash,
       role: "STUDENT",
-      phone,
+      phone: optional(formData, "phone"),
       dateOfBirth: new Date(dateOfBirth),
-      gender,
+      gender: optional(formData, "gender"),
+      paymentStatus: paymentStatus as "PENDING" | "PAID" | "WAIVED",
+      team: optional(formData, "team"),
+      joinDate: new Date(joinDate),
+      parentName,
+      parentPhone,
+      parentEmail: optional(formData, "parentEmail"),
+      school: optional(formData, "school"),
+      gradeYear: optional(formData, "gradeYear"),
+      emergencyContactName,
+      emergencyContactPhone,
+      emergencyContactRelation: optional(
+        formData,
+        "emergencyContactRelation",
+      ),
+      medicalConditions: optional(formData, "medicalConditions"),
+      dietaryRestrictions: optional(formData, "dietaryRestrictions"),
     },
   });
 
   revalidatePath("/students");
-  return { error: null, successAt: Date.now() };
+  redirect("/students");
 }
 
 export async function addComment(formData: FormData) {

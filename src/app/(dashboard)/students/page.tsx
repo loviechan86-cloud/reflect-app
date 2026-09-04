@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { weekStart, formatWeekLabel } from "@/lib/week";
 import Link from "next/link";
-import { AddStudentForm } from "./add-student-form";
 
 export default async function StudentsPage() {
   const session = await auth();
@@ -32,13 +31,17 @@ export default async function StudentsPage() {
             {students.length} {students.length === 1 ? "student" : "students"}
           </p>
         </div>
+        <Link
+          href="/students/new"
+          className="rounded-full bg-cta px-5 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
+        >
+          + Add student
+        </Link>
       </div>
 
-      <p className="mt-4 mb-2 text-xs font-bold tracking-wide text-blue uppercase">
+      <p className="mt-4 mb-4 text-xs font-bold tracking-wide text-blue uppercase">
         Week of {formatWeekLabel(currentWeek)}
       </p>
-
-      <AddStudentForm />
 
       {students.length === 0 ? (
         <p className="text-sm text-gray-500">No students yet.</p>

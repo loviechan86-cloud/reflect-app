@@ -12,6 +12,12 @@ enum Role {
   STUDENT
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  WAIVED
+}
+
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
@@ -24,6 +30,24 @@ model User {
   phone       String?
   dateOfBirth DateTime?
   gender      String?
+
+  paymentStatus PaymentStatus?
+  team          String?
+  joinDate      DateTime?
+
+  parentName  String?
+  parentPhone String?
+  parentEmail String?
+
+  school    String?
+  gradeYear String?
+
+  emergencyContactName     String?
+  emergencyContactPhone    String?
+  emergencyContactRelation String?
+
+  medicalConditions   String?
+  dietaryRestrictions String?
 
   reflections Reflection[] @relation("StudentReflections")
   comments    Comment[]    @relation("StaffComments")
