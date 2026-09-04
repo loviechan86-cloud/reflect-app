@@ -64,17 +64,14 @@ export default async function StudentsPage() {
                   href={`/students/${s.id}`}
                   className="grid grid-cols-[1fr_auto] items-center gap-4 px-5 py-3.5 hover:bg-background"
                 >
-                  <div>
-                    <p className="text-sm font-bold text-navy">
-                      {s.name}
-                      {!s.active && (
-                        <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600 uppercase">
-                          Deactivated
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-xs text-gray-500">{s.email}</p>
-                  </div>
+                  <p className="text-sm font-bold text-navy">
+                    {s.name}
+                    {!s.active && (
+                      <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-bold text-red-600 uppercase">
+                        Deactivated
+                      </span>
+                    )}
+                  </p>
                   <span
                     className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
                       submitted
