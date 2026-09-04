@@ -4,6 +4,9 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+export type CreateStaffState = { error: string | null };
 
 async function requireStaff() {
   const session = await auth();
@@ -13,10 +16,10 @@ async function requireStaff() {
   return session;
 }
 
-export async function createUser(
-  prevState: { error: string | null; successAt: number },
+export async function createStaff(
+  _prevState: CreateStaffState,
   formData: FormData,
-): Promise<{ error: string | null; successAt: number }> {
+): Promise<CreateStaffState> {
   await requireStaff();
 
   const name = String(formData.get("name") ?? "").trim();
@@ -24,43 +27,40 @@ export async function createUser(
     .trim()
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
-  const role = String(formData.get("role") ?? "STUDENT") as
-    | "STAFF"
-    | "STUDENT";
 
   if (!name || !email || password.length < 8) {
     return {
       error:
         "Name, email, and a password of at least 8 characters are required.",
-      successAt: prevState.successAt,
     };
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return {
-      error: "A user with that email already exists.",
-      successAt: prevState.successAt,
-    };
+    return { error: "A user with that email already exists." };
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
 
   await prisma.user.create({
-    data: { name, email, passwordHash, role },
+    data: { name, email, passwordHash, role: "STAFF" },
   });
 
   revalidatePath("/staff");
-  return { error: null, successAt: Date.now() };
+  redirect("/staff");
 }
 
-export async function deleteUser(formData: FormData) {
+export async function setStaffActive(formData: FormData) {
   const session = await requireStaff();
 
   const userId = String(formData.get("userId") ?? "");
+  const active = formData.get("active") === "true";
   if (!userId || userId === session.user.id) return;
 
-  await prisma.user.delete({ where: { id: userId } });
+  await prisma.user.update({
+    where: { id: userId, role: "STAFF" },
+    data: { active },
+  });
 
   revalidatePath("/staff");
 }

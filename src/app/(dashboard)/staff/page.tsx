@@ -1,97 +1,87 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { CreateUserForm } from "./create-user-form";
-import { deleteUser } from "./actions";
+import { StaffStatusAction } from "./staff-status-action";
+import Link from "next/link";
 
 export default async function StaffPage() {
   const session = await auth();
   if (!session) return null;
 
-  const users = await prisma.user.findMany({
-    orderBy: [{ role: "asc" }, { name: "asc" }],
+  const staff = await prisma.user.findMany({
+    where: { role: "STAFF" },
+    orderBy: { name: "asc" },
   });
-  const staff = users.filter((u) => u.role === "STAFF");
-  const students = users.filter((u) => u.role === "STUDENT");
 
   return (
-    <main className="mx-auto max-w-3xl space-y-8 px-4 py-8 lg:py-10">
-      <h1 className="text-2xl font-extrabold tracking-tight text-navy">
-        Staff
-      </h1>
-
-      <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="h-1.5 bg-cta" />
-        <div className="p-6">
-          <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
-            Create account
-          </h2>
-          <CreateUserForm />
+    <main className="mx-auto max-w-3xl px-4 py-8 lg:py-10">
+      <div className="mb-1 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy">
+            Staff
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            {staff.length} {staff.length === 1 ? "staff member" : "staff members"}
+          </p>
         </div>
-      </section>
+        <Link
+          href="/staff/new"
+          className="rounded-full bg-cta px-5 py-2 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
+        >
+          + Add staff
+        </Link>
+      </div>
 
-      <section>
-        <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
-          Staff ({staff.length})
-        </h2>
-        <div className="space-y-2">
-          {staff.map((s) => (
-            <div
-              key={s.id}
-              className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
-            >
-              <div>
+      <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="grid grid-cols-[1.4fr_1.6fr_auto_auto] gap-4 border-b border-gray-100 px-5 py-3">
+          <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+            Name
+          </p>
+          <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+            Email
+          </p>
+          <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+            Status
+          </p>
+          <p className="text-xs font-bold tracking-wide text-gray-400 uppercase">
+            Actions
+          </p>
+        </div>
+        <div className="divide-y divide-gray-100">
+          {staff.map((s) => {
+            const isSelf = s.id === session.user.id;
+            return (
+              <div
+                key={s.id}
+                className="grid grid-cols-[1.4fr_1.6fr_auto_auto] items-center gap-4 px-5 py-3.5"
+              >
                 <p className="text-sm font-bold text-navy">
                   {s.name}
-                  {s.id === session.user.id && (
+                  {isSelf && (
                     <span className="ml-2 text-xs font-normal text-gray-400">
                       (you)
                     </span>
                   )}
                 </p>
-                <p className="text-xs text-gray-500">{s.email}</p>
+                <p className="truncate text-sm text-gray-500">{s.email}</p>
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
+                    s.active
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-600"
+                  }`}
+                >
+                  {s.active ? "Active" : "Deactivated"}
+                </span>
+                {isSelf ? (
+                  <span className="text-xs text-gray-300">&mdash;</span>
+                ) : (
+                  <StaffStatusAction userId={s.id} active={s.active} />
+                )}
               </div>
-              {s.id !== session.user.id && <DeleteButton userId={s.id} />}
-            </div>
-          ))}
+            );
+          })}
         </div>
-      </section>
-
-      <section>
-        <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
-          Students ({students.length})
-        </h2>
-        <div className="space-y-2">
-          {students.map((s) => (
-            <div
-              key={s.id}
-              className="flex items-center justify-between rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
-            >
-              <div>
-                <p className="text-sm font-bold text-navy">{s.name}</p>
-                <p className="text-xs text-gray-500">{s.email}</p>
-              </div>
-              <DeleteButton userId={s.id} />
-            </div>
-          ))}
-          {students.length === 0 && (
-            <p className="text-sm text-gray-500">No students yet.</p>
-          )}
-        </div>
-      </section>
+      </div>
     </main>
-  );
-}
-
-function DeleteButton({ userId }: { userId: string }) {
-  return (
-    <form action={deleteUser}>
-      <input type="hidden" name="userId" value={userId} />
-      <button
-        type="submit"
-        className="rounded-full border border-red-200 px-3 py-1.5 text-sm font-bold text-red-600 uppercase tracking-wide hover:bg-red-50"
-      >
-        Remove
-      </button>
-    </form>
   );
 }

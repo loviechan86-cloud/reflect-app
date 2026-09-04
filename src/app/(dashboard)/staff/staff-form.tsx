@@ -1,20 +1,18 @@
 "use client";
 
 import { useActionState } from "react";
-import { createUser } from "./actions";
+import { createStaff, type CreateStaffState } from "./actions";
 
-export function CreateUserForm() {
-  const [state, formAction, pending] = useActionState(createUser, {
-    error: null,
-    successAt: 0,
-  });
+const initialState: CreateStaffState = { error: null };
+
+export function StaffForm() {
+  const [state, formAction, pending] = useActionState(
+    createStaff,
+    initialState,
+  );
 
   return (
-    <form
-      action={formAction}
-      key={state.successAt}
-      className="grid grid-cols-1 gap-3 sm:grid-cols-2"
-    >
+    <form action={formAction} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <input
         name="name"
         placeholder="Full name"
@@ -34,16 +32,8 @@ export function CreateUserForm() {
         placeholder="Temporary password (min 8 chars)"
         required
         minLength={8}
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
+        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none sm:col-span-2"
       />
-      <select
-        name="role"
-        defaultValue="STUDENT"
-        className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
-      >
-        <option value="STUDENT">Student</option>
-        <option value="STAFF">Staff</option>
-      </select>
 
       {state.error && (
         <p className="text-sm text-red-600 sm:col-span-2">{state.error}</p>
