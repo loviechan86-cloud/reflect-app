@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatWeekLabel } from "@/lib/week";
 import { addComment } from "../actions";
+import { StudentProfileGrid } from "@/components/student-profile-fields";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -31,7 +32,7 @@ export default async function StudentDetailPage({
   });
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-8 lg:py-10">
+    <main className="mx-auto max-w-3xl px-4 py-8 lg:py-10">
       <Link
         href="/students"
         className="mb-4 inline-block text-sm font-bold text-blue hover:text-navy"
@@ -39,9 +40,26 @@ export default async function StudentDetailPage({
         &larr; All students
       </Link>
 
-      <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-navy">
+      <h1 className="text-2xl font-extrabold tracking-tight text-navy">
         {student.name}
       </h1>
+      <p className="mt-1 mb-6 text-sm text-gray-500">
+        Student{student.team ? ` · ${student.team}` : ""}
+      </p>
+
+      <section className="mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div className="h-1.5 bg-cta" />
+        <div className="p-6">
+          <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
+            Profile
+          </h2>
+          <StudentProfileGrid student={student} />
+        </div>
+      </section>
+
+      <h2 className="mb-3 text-xs font-bold tracking-wide text-blue uppercase">
+        Reflections ({reflections.length})
+      </h2>
 
       {reflections.length === 0 && (
         <p className="text-sm text-gray-500">No reflections yet.</p>
@@ -75,21 +93,22 @@ export default async function StudentDetailPage({
 
             <form
               action={addComment}
-              className="mt-4 flex gap-2 border-t border-gray-100 pt-3"
+              className="mt-4 space-y-2 border-t border-gray-100 pt-3"
             >
               <input type="hidden" name="reflectionId" value={r.id} />
               <input type="hidden" name="studentId" value={studentId} />
-              <input
+              <textarea
                 name="content"
-                placeholder="Leave a comment..."
+                rows={2}
+                placeholder="Write staff feedback..."
                 required
-                className="flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
               />
               <button
                 type="submit"
                 className="rounded-full bg-cta px-4 py-1.5 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
               >
-                Reply
+                Save feedback
               </button>
             </form>
           </div>
