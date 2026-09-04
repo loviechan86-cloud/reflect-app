@@ -4,6 +4,7 @@ import { formatWeekLabel } from "@/lib/week";
 import { addComment } from "../actions";
 import { StudentProfileGrid } from "@/components/student-profile-fields";
 import { StudentActionBar } from "./student-action-bar";
+import { PaymentSelect } from "./payment-select";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -58,10 +59,16 @@ export default async function StudentDetailPage({
       <section className="mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="h-1.5 bg-cta" />
         <div className="p-6">
-          <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
-            Profile
-          </h2>
-          <StudentProfileGrid student={student} />
+          <StudentProfileGrid
+            title="Profile"
+            student={student}
+            paymentControl={
+              <PaymentSelect
+                studentId={studentId}
+                currentStatus={student.paymentStatus}
+              />
+            }
+          />
         </div>
       </section>
 

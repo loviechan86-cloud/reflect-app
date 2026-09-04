@@ -188,6 +188,22 @@ export async function setActive(formData: FormData) {
   revalidatePath("/students");
 }
 
+export async function updatePaymentStatus(formData: FormData) {
+  await requireStaff();
+
+  const studentId = String(formData.get("studentId") ?? "");
+  const paymentStatus = String(formData.get("paymentStatus") ?? "");
+  if (!studentId || !paymentStatus) return;
+
+  await prisma.user.update({
+    where: { id: studentId, role: "STUDENT" },
+    data: { paymentStatus: paymentStatus as "PENDING" | "PAID" | "WAIVED" },
+  });
+
+  revalidatePath(`/students/${studentId}`);
+  revalidatePath("/students");
+}
+
 export type ResetPasswordState = { error: string | null; success: boolean };
 
 export async function resetPassword(

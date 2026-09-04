@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export function formatDate(date: Date | null) {
   if (!date) return "—";
   return new Intl.DateTimeFormat("en-US", {
@@ -11,6 +13,19 @@ export const paymentStatusLabel: Record<string, string> = {
   PAID: "Paid",
   WAIVED: "Waived",
 };
+
+export function PaymentBadge({ status }: { status: string | null }) {
+  return (
+    <p className="text-sm">
+      <span className="text-xs font-bold text-gray-400 uppercase">
+        Payment:{" "}
+      </span>
+      <span className="font-bold text-navy">
+        {status ? paymentStatusLabel[status] : "—"}
+      </span>
+    </p>
+  );
+}
 
 export function Field({
   label,
@@ -31,9 +46,6 @@ type StudentLike = {
   phone: string | null;
   dateOfBirth: Date | null;
   gender: string | null;
-  paymentStatus: string | null;
-  team: string | null;
-  joinDate: Date | null;
   school: string | null;
   gradeYear: string | null;
   parentName: string | null;
@@ -46,64 +58,66 @@ type StudentLike = {
   dietaryRestrictions: string | null;
 };
 
-export function StudentProfileGrid({ student }: { student: StudentLike }) {
+export function StudentProfileGrid({
+  title,
+  student,
+  paymentControl,
+}: {
+  title: string;
+  student: StudentLike;
+  paymentControl?: ReactNode;
+}) {
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        <Field label="Phone" value={student.phone} />
-        <Field
-          label="Date of birth"
-          value={formatDate(student.dateOfBirth)}
-        />
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="text-xs font-bold tracking-wide text-blue uppercase">
+          {title}
+        </h2>
+        {paymentControl}
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
+        <Field label="Date of birth" value={formatDate(student.dateOfBirth)} />
         <Field label="Gender" value={student.gender} />
-        <Field
-          label="Payment status"
-          value={
-            student.paymentStatus
-              ? paymentStatusLabel[student.paymentStatus]
-              : null
-          }
-        />
-        <Field label="Team" value={student.team} />
-        <Field label="Join date" value={formatDate(student.joinDate)} />
+        <Field label="Phone" value={student.phone} />
+
         <Field label="School" value={student.school} />
         <Field label="Grade / year" value={student.gradeYear} />
-      </div>
+        <Field label="Parent/guardian" value={student.parentName} />
 
-      <h3 className="mt-6 mb-3 text-xs font-bold tracking-wide text-blue uppercase">
-        Parent / guardian
-      </h3>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        <Field label="Name" value={student.parentName} />
-        <Field label="Phone" value={student.parentPhone} />
-        <Field label="Email" value={student.parentEmail} />
-      </div>
-
-      <h3 className="mt-6 mb-3 text-xs font-bold tracking-wide text-blue uppercase">
-        Emergency contact
-      </h3>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        <Field label="Name" value={student.emergencyContactName} />
-        <Field label="Phone" value={student.emergencyContactPhone} />
+        <Field label="Parent phone" value={student.parentPhone} />
+        <Field label="Parent email" value={student.parentEmail} />
         <Field
-          label="Relation"
+          label="Emergency contact"
+          value={student.emergencyContactName}
+        />
+
+        <Field
+          label="Emergency phone"
+          value={student.emergencyContactPhone}
+        />
+        <Field
+          label="Emergency relation"
           value={student.emergencyContactRelation}
         />
       </div>
 
-      <h3 className="mt-6 mb-3 text-xs font-bold tracking-wide text-blue uppercase">
-        Health &amp; dietary
-      </h3>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field
-          label="Medical conditions / allergies"
-          value={student.medicalConditions}
-        />
-        <Field
-          label="Dietary restrictions"
-          value={student.dietaryRestrictions}
-        />
-      </div>
+      {(student.medicalConditions || student.dietaryRestrictions) && (
+        <div className="mt-4 space-y-1 border-t border-gray-100 pt-3 text-sm">
+          {student.medicalConditions && (
+            <p>
+              <span className="font-bold text-cta">Medical:</span>{" "}
+              <span className="text-navy">{student.medicalConditions}</span>
+            </p>
+          )}
+          {student.dietaryRestrictions && (
+            <p>
+              <span className="font-bold text-cta">Dietary:</span>{" "}
+              <span className="text-navy">{student.dietaryRestrictions}</span>
+            </p>
+          )}
+        </div>
+      )}
     </>
   );
 }

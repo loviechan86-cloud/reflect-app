@@ -2,7 +2,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ProfileForm } from "./profile-form";
 import { PasswordForm } from "./password-form";
-import { StudentProfileGrid } from "@/components/student-profile-fields";
+import {
+  StudentProfileGrid,
+  PaymentBadge,
+} from "@/components/student-profile-fields";
 
 export default async function ProfilePage() {
   const session = await auth();
@@ -33,10 +36,11 @@ export default async function ProfilePage() {
         <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
           <div className="h-1.5 bg-cta" />
           <div className="p-6">
-            <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
-              Student profile
-            </h2>
-            <StudentProfileGrid student={user} />
+            <StudentProfileGrid
+              title="Student profile"
+              student={user}
+              paymentControl={<PaymentBadge status={user.paymentStatus} />}
+            />
 
             <p className="mt-6 text-xs text-gray-500">
               Need to update any of this? Ask your staff contact.
