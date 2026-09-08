@@ -1,10 +1,10 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { formatWeekLabel } from "@/lib/week";
-import { addComment } from "../actions";
 import { StudentProfileGrid } from "@/components/student-profile-fields";
 import { StudentActionBar } from "./student-action-bar";
 import { PaymentSelect } from "./payment-select";
+import { ReflectionCard } from "./reflection-card";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -82,51 +82,18 @@ export default async function StudentDetailPage({
 
       <div className="space-y-4">
         {reflections.map((r) => (
-          <div
+          <ReflectionCard
             key={r.id}
-            className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
-          >
-            <p className="mb-2 text-xs font-bold text-gray-500">
-              {formatWeekLabel(r.weekOf)}
-            </p>
-            <p className="whitespace-pre-wrap text-sm text-gray-800">
-              {r.content}
-            </p>
-
-            {r.comments.length > 0 && (
-              <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
-                {r.comments.map((c) => (
-                  <div key={c.id} className="text-sm">
-                    <span className="font-bold text-navy">
-                      {c.staff.name}:
-                    </span>{" "}
-                    <span className="text-gray-700">{c.content}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <form
-              action={addComment}
-              className="mt-4 space-y-2 border-t border-gray-100 pt-3"
-            >
-              <input type="hidden" name="reflectionId" value={r.id} />
-              <input type="hidden" name="studentId" value={studentId} />
-              <textarea
-                name="content"
-                rows={2}
-                placeholder="Write staff feedback..."
-                required
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="rounded-full bg-cta px-4 py-1.5 text-sm font-bold text-white uppercase tracking-wide hover:bg-cta-dark"
-              >
-                Save feedback
-              </button>
-            </form>
-          </div>
+            studentId={studentId}
+            reflectionId={r.id}
+            weekLabel={formatWeekLabel(r.weekOf)}
+            content={r.content}
+            comments={r.comments.map((c) => ({
+              id: c.id,
+              content: c.content,
+              staffName: c.staff.name,
+            }))}
+          />
         ))}
       </div>
     </main>

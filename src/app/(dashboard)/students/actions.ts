@@ -251,3 +251,73 @@ export async function addComment(formData: FormData) {
 
   revalidatePath(`/students/${studentId}`);
 }
+
+export type UpdateContentState = { error: string | null; success: boolean };
+
+export async function updateReflection(
+  reflectionId: string,
+  _prevState: UpdateContentState,
+  formData: FormData,
+): Promise<UpdateContentState> {
+  await requireStaff();
+
+  const content = String(formData.get("content") ?? "").trim();
+  const studentId = String(formData.get("studentId") ?? "");
+  if (!content) {
+    return { error: "Reflection can't be empty.", success: false };
+  }
+
+  await prisma.reflection.update({
+    where: { id: reflectionId },
+    data: { content },
+  });
+
+  revalidatePath(`/students/${studentId}`);
+  return { error: null, success: true };
+}
+
+export async function deleteReflection(formData: FormData) {
+  await requireStaff();
+
+  const reflectionId = String(formData.get("reflectionId") ?? "");
+  const studentId = String(formData.get("studentId") ?? "");
+  if (!reflectionId) return;
+
+  await prisma.reflection.delete({ where: { id: reflectionId } });
+
+  revalidatePath(`/students/${studentId}`);
+}
+
+export async function updateComment(
+  commentId: string,
+  _prevState: UpdateContentState,
+  formData: FormData,
+): Promise<UpdateContentState> {
+  await requireStaff();
+
+  const content = String(formData.get("content") ?? "").trim();
+  const studentId = String(formData.get("studentId") ?? "");
+  if (!content) {
+    return { error: "Feedback can't be empty.", success: false };
+  }
+
+  await prisma.comment.update({
+    where: { id: commentId },
+    data: { content },
+  });
+
+  revalidatePath(`/students/${studentId}`);
+  return { error: null, success: true };
+}
+
+export async function deleteComment(formData: FormData) {
+  await requireStaff();
+
+  const commentId = String(formData.get("commentId") ?? "");
+  const studentId = String(formData.get("studentId") ?? "");
+  if (!commentId) return;
+
+  await prisma.comment.delete({ where: { id: commentId } });
+
+  revalidatePath(`/students/${studentId}`);
+}
