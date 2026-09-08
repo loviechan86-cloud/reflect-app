@@ -22,20 +22,25 @@ export default async function ProfilePage() {
         Profile
       </h1>
 
-      <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-        <div className="h-1.5 bg-cta" />
-        <div className="p-6">
-          <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
-            Your details
-          </h2>
-          <ProfileForm name={user.name} email={user.email} />
-        </div>
-      </section>
+      {user.role === "STAFF" && (
+        <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="h-1.5 bg-cta" />
+          <div className="p-6">
+            <h2 className="mb-4 text-xs font-bold tracking-wide text-blue uppercase">
+              Your details
+            </h2>
+            <ProfileForm name={user.name} email={user.email} />
+          </div>
+        </section>
+      )}
 
       {user.role === "STUDENT" && (
         <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
           <div className="h-1.5 bg-cta" />
           <div className="p-6">
+            <h2 className="mb-4 text-xl font-extrabold tracking-tight text-navy">
+              {user.name}
+            </h2>
             <StudentProfileGrid
               title="Student profile"
               student={user}
@@ -59,10 +64,12 @@ export default async function ProfilePage() {
         </div>
       </section>
 
-      <p className="text-xs text-gray-500">
-        If you change your email or name, sign out and back in for it to show
-        correctly everywhere.
-      </p>
+      {user.role === "STAFF" && (
+        <p className="text-xs text-gray-500">
+          If you change your email or name, sign out and back in for it to
+          show correctly everywhere.
+        </p>
+      )}
     </main>
   );
 }
