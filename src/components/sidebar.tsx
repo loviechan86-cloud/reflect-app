@@ -96,12 +96,6 @@ const roleNav: Record<
       mobileLabel: "Students",
       icon: StudentsIcon,
     },
-    {
-      href: "/reflections",
-      label: "Reflection",
-      mobileLabel: "Reflection",
-      icon: ReflectionsIcon,
-    },
     { href: "/staff", label: "Staff", mobileLabel: "Staff", icon: StaffIcon },
   ],
   STUDENT: [

@@ -250,5 +250,4 @@ export async function addComment(formData: FormData) {
   });
 
   revalidatePath(`/students/${studentId}`);
-  revalidatePath("/reflections");
 }

@@ -6,7 +6,7 @@ const roleHome: Record<string, string> = {
   STUDENT: "/student",
 };
 
-const staffPaths = ["/dashboard", "/students", "/reflections", "/staff"];
+const staffPaths = ["/dashboard", "/students", "/staff"];
 
 function matchesPath(pathname: string, base: string) {
   return pathname === base || pathname.startsWith(`${base}/`);
@@ -50,7 +50,6 @@ export const config = {
     "/login",
     "/dashboard/:path*",
     "/students/:path*",
-    "/reflections/:path*",
     "/staff/:path*",
     "/student/:path*",
     "/profile",
