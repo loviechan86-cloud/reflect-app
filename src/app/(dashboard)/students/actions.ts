@@ -254,46 +254,12 @@ export async function addComment(formData: FormData) {
 
 export type UpdateContentState = { error: string | null; success: boolean };
 
-export async function updateReflection(
-  reflectionId: string,
-  _prevState: UpdateContentState,
-  formData: FormData,
-): Promise<UpdateContentState> {
-  await requireStaff();
-
-  const content = String(formData.get("content") ?? "").trim();
-  const studentId = String(formData.get("studentId") ?? "");
-  if (!content) {
-    return { error: "Reflection can't be empty.", success: false };
-  }
-
-  await prisma.reflection.update({
-    where: { id: reflectionId },
-    data: { content },
-  });
-
-  revalidatePath(`/students/${studentId}`);
-  return { error: null, success: true };
-}
-
-export async function deleteReflection(formData: FormData) {
-  await requireStaff();
-
-  const reflectionId = String(formData.get("reflectionId") ?? "");
-  const studentId = String(formData.get("studentId") ?? "");
-  if (!reflectionId) return;
-
-  await prisma.reflection.delete({ where: { id: reflectionId } });
-
-  revalidatePath(`/students/${studentId}`);
-}
-
 export async function updateComment(
   commentId: string,
   _prevState: UpdateContentState,
   formData: FormData,
 ): Promise<UpdateContentState> {
-  await requireStaff();
+  const session = await requireStaff();
 
   const content = String(formData.get("content") ?? "").trim();
   const studentId = String(formData.get("studentId") ?? "");
@@ -301,23 +267,28 @@ export async function updateComment(
     return { error: "Feedback can't be empty.", success: false };
   }
 
-  await prisma.comment.update({
-    where: { id: commentId },
+  const { count } = await prisma.comment.updateMany({
+    where: { id: commentId, staffId: session.user.id },
     data: { content },
   });
+  if (count === 0) {
+    return { error: "You can only edit your own feedback.", success: false };
+  }
 
   revalidatePath(`/students/${studentId}`);
   return { error: null, success: true };
 }
 
 export async function deleteComment(formData: FormData) {
-  await requireStaff();
+  const session = await requireStaff();
 
   const commentId = String(formData.get("commentId") ?? "");
   const studentId = String(formData.get("studentId") ?? "");
   if (!commentId) return;
 
-  await prisma.comment.delete({ where: { id: commentId } });
+  await prisma.comment.deleteMany({
+    where: { id: commentId, staffId: session.user.id },
+  });
 
   revalidatePath(`/students/${studentId}`);
 }

@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { weekStart, formatWeekLabel } from "@/lib/week";
 import { submitReflection } from "./actions";
+import { DeleteReflectionButton } from "./delete-reflection-button";
+import { StudentReflectionCard } from "./reflection-card";
 
 export default async function StudentPage() {
   const session = await auth();
@@ -48,9 +50,14 @@ export default async function StudentPage() {
       <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
         <div className="h-1.5 bg-cta" />
         <div className="p-6">
-          <h2 className="mb-1 text-xs font-bold tracking-wide text-blue uppercase">
-            This week &middot; {formatWeekLabel(currentWeek)}
-          </h2>
+          <div className="mb-1 flex items-center justify-between">
+            <h2 className="text-xs font-bold tracking-wide text-blue uppercase">
+              This week &middot; {formatWeekLabel(currentWeek)}
+            </h2>
+            {thisWeek && (
+              <DeleteReflectionButton reflectionId={thisWeek.id} />
+            )}
+          </div>
           <p className="mb-4 text-sm text-gray-500">
             {thisWeek
               ? "You can still edit your reflection for this week."
@@ -95,30 +102,17 @@ export default async function StudentPage() {
         )}
         <div className="space-y-4">
           {history.map((r) => (
-            <div
+            <StudentReflectionCard
               key={r.id}
-              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
-            >
-              <p className="mb-2 text-xs font-bold text-gray-500">
-                {formatWeekLabel(r.weekOf)}
-              </p>
-              <p className="whitespace-pre-wrap text-sm text-gray-800">
-                {r.content}
-              </p>
-
-              {r.comments.length > 0 && (
-                <div className="mt-4 space-y-2 border-t border-gray-100 pt-3">
-                  {r.comments.map((c) => (
-                    <div key={c.id} className="text-sm">
-                      <span className="font-bold text-navy">
-                        {c.staff.name}:
-                      </span>{" "}
-                      <span className="text-gray-700">{c.content}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+              reflectionId={r.id}
+              weekLabel={formatWeekLabel(r.weekOf)}
+              content={r.content}
+              comments={r.comments.map((c) => ({
+                id: c.id,
+                content: c.content,
+                staffName: c.staff.name,
+              }))}
+            />
           ))}
         </div>
       </section>

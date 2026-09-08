@@ -91,8 +91,10 @@ export default async function StudentDetailPage({
             comments={r.comments.map((c) => ({
               id: c.id,
               content: c.content,
+              staffId: c.staffId,
               staffName: c.staff.name,
             }))}
+            currentStaffId={session.user.id}
           />
         ))}
       </div>
