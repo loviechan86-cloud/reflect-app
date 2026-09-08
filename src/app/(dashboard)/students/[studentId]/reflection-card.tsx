@@ -14,6 +14,42 @@ const initialState: UpdateContentState = { error: null, success: false };
 
 type CommentData = { id: string; content: string; staffName: string };
 
+function EditIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M13.3 3.3a1.5 1.5 0 0 1 2.1 0l1.3 1.3a1.5 1.5 0 0 1 0 2.1L7 16.4l-3.5.8.8-3.5 8.9-9.4z" />
+      <path d="M11.8 4.8l3.4 3.4" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M4 5.5h12" />
+      <path d="M8 5.5V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5" />
+      <path d="M5.5 5.5l.6 9.4a1.5 1.5 0 0 0 1.5 1.4h4.8a1.5 1.5 0 0 0 1.5-1.4l.6-9.4" />
+      <path d="M8.3 8.7v4.6M11.7 8.7v4.6" />
+    </svg>
+  );
+}
+
 // Closes the edit form the moment an update succeeds, without an effect:
 // derives the transition during render and adjusts state right away.
 function useCloseOnSuccess(success: boolean, close: () => void) {
@@ -51,13 +87,15 @@ export function ReflectionCard({
       <div className="mb-2 flex items-center justify-between">
         <p className="text-xs font-bold text-gray-500">{weekLabel}</p>
         {!editing && (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="text-xs font-bold text-blue uppercase tracking-wide hover:text-navy"
+              aria-label="Edit reflection"
+              title="Edit"
+              className="rounded-lg p-1.5 text-blue hover:bg-background hover:text-navy"
             >
-              Edit
+              <EditIcon />
             </button>
             <form
               action={deleteReflection}
@@ -75,9 +113,11 @@ export function ReflectionCard({
               <input type="hidden" name="studentId" value={studentId} />
               <button
                 type="submit"
-                className="text-xs font-bold text-red-600 uppercase tracking-wide hover:text-red-700"
+                aria-label="Delete reflection"
+                title="Delete"
+                className="rounded-lg p-1.5 text-red-600 hover:bg-red-50 hover:text-red-700"
               >
-                Delete
+                <TrashIcon />
               </button>
             </form>
           </div>
@@ -204,13 +244,15 @@ function CommentRow({
         <span className="font-bold text-navy">{comment.staffName}:</span>{" "}
         <span className="text-gray-700">{comment.content}</span>
       </p>
-      <div className="flex shrink-0 items-center gap-2 pt-0.5">
+      <div className="flex shrink-0 items-center gap-0.5">
         <button
           type="button"
           onClick={() => setEditing(true)}
-          className="text-xs font-bold text-blue uppercase hover:text-navy"
+          aria-label="Edit feedback"
+          title="Edit"
+          className="rounded-lg p-1 text-blue hover:bg-background hover:text-navy"
         >
-          Edit
+          <EditIcon />
         </button>
         <form
           action={deleteComment}
@@ -222,9 +264,11 @@ function CommentRow({
           <input type="hidden" name="studentId" value={studentId} />
           <button
             type="submit"
-            className="text-xs font-bold text-red-600 uppercase hover:text-red-700"
+            aria-label="Delete feedback"
+            title="Delete"
+            className="rounded-lg p-1 text-red-600 hover:bg-red-50 hover:text-red-700"
           >
-            Delete
+            <TrashIcon />
           </button>
         </form>
       </div>
